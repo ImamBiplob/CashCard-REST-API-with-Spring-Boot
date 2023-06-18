@@ -40,4 +40,16 @@ private ResponseEntity<Void> createCashCard(@RequestBody CashCard newCashCardReq
             .toUri();
    return ResponseEntity.created(locationOfNewCashCard).build();
 }
+
+
+@GetMapping
+public ResponseEntity<List<CashCard>> findAll(Pageable pageable) {
+    Page<CashCard> page = cashCardRepository.findAll(
+            PageRequest.of(
+        pageable.getPageNumber(),
+        pageable.getPageSize(),
+        pageable.getSortOr(Sort.by(Sort.Direction.ASC, "amount"))
+));
+    return ResponseEntity.ok(page.getContent());
+}
 }
